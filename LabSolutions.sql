@@ -118,10 +118,11 @@ SELECT status, MAX(total_mileage) FROM customers GROUP BY status;
 SELECT COUNT(*) FROM aircrafts WHERE name LIKE '%Boeing%';
 SELECT * FROM flights WHERE mileage BETWEEN 300 AND 2000;
 
-SELECT c.status, AVG(f.mileage)
+SELECT c.status,
+ AVG(f.flight_mileage)
 FROM bookings b
-JOIN customers c ON b.customer_id = c.id
-JOIN flights f ON b.flight_number = f.flight_number
+JOIN customers c ON b.customer_id = c.customer_id
+JOIN flights f ON b.flight_id = f.flight_id
 GROUP BY c.status;
 
 SELECT 
@@ -129,7 +130,7 @@ SELECT
     SUM(f.mileage) AS total_mileage
 FROM bookings b
 JOIN customers c ON b.customer_id = c.id
-JOIN flights f ON b.flight_number = f.flight_number
+JOIN flights f ON b.flight_id = f.flight_id
 JOIN aircrafts a ON f.aircraft_id = a.id
 WHERE c.status = 'Gold'
 GROUP BY a.name
