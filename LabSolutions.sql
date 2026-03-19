@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS articles (
 INSERT INTO authors (author_id, name) VALUES
     (1,'Maria Charlotte'),
     (2,'Juan Perez'),
-    (3,'Kenan Gafarov');
+    (3,'Zoe Harper');
 
 
 INSERT INTO articles (article_id, author_id, title, word_count, views) VALUES
@@ -111,12 +111,12 @@ INSERT INTO bookings (booking_id, customer_id, flight_id) VALUES
 -- Task 3
 
 SELECT COUNT(DISTINCT flight_number) FROM flights;
-SELECT AVG(mileage) FROM flights;
+SELECT AVG(flight_mileage) FROM flights;
 SELECT AVG(total_seats) FROM aircrafts;
 SELECT status, AVG(total_mileage) FROM customers GROUP BY status;
 SELECT status, MAX(total_mileage) FROM customers GROUP BY status;
-SELECT COUNT(*) FROM aircrafts WHERE name LIKE '%Boeing%';
-SELECT * FROM flights WHERE mileage BETWEEN 300 AND 2000;
+SELECT COUNT(*) FROM aircrafts WHERE model LIKE '%Boeing%';
+SELECT * FROM flights WHERE flight_mileage  BETWEEN 300 AND 2000;
 
 SELECT c.status,
  AVG(f.flight_mileage)
@@ -126,14 +126,14 @@ JOIN flights f ON b.flight_id = f.flight_id
 GROUP BY c.status;
 
 SELECT 
-    a.name, 
-    SUM(f.mileage) AS total_mileage
+    a.model, 
+    COUNT(*) AS total_bookings
 FROM bookings b
-JOIN customers c ON b.customer_id = c.id
+JOIN customers c ON b.customer_id = c.customer_id
 JOIN flights f ON b.flight_id = f.flight_id
-JOIN aircrafts a ON f.aircraft_id = a.id
+JOIN aircrafts a ON f.aircraft_id = a.aircraft_id
 WHERE c.status = 'Gold'
-GROUP BY a.name
-ORDER BY total_mileage DESC
+GROUP BY a.model
+ORDER BY total_bookings DESC
 LIMIT 1;
 
